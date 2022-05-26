@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.0",
+	"EngineAssociation": "{40557BA7-4665-1279-44B9-B5A43F0E31D5}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -26,6 +26,10 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "OnlineSubsystemGoogle",
+			"Enabled": true
 		}
 	]
 }
