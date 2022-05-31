@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Camera/CameraComponent.h"
 #include "BaseCharacter.generated.h"
 
 UCLASS()
@@ -16,14 +17,19 @@ public:
 	ABaseCharacter();
 
 protected:
-	// Called when the game starts or when spawned
+	
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-	bool IsScreenTouch;
+		bool IsScreenTouch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCameraComponent* Camera;
+
 
 	//set rotation between two rotation by alpha
 	UFUNCTION(BlueprintCallable)
 		void RotationLerpComponent(UStaticMeshComponent* RotateObject, FRotator ToRotate, FRotator FromRotate, float alpha);
 
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 
@@ -31,6 +37,13 @@ protected:
 	
 
 public:	
+	//Ball which will fly
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* Ball;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float MaxHighRun;
+
 	//Plank which will launch ball
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		UStaticMeshComponent* PlankRight;

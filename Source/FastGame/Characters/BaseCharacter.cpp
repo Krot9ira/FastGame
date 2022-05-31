@@ -9,13 +9,36 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
-	PlankLeft = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlankLeft"));
-	PlankLeft->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-	PlankRight = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlankRight"));
-	PlankRight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	if (!RootComponent)
+	{
+		RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	}
+	
+	if (!Camera)
+	{
+		Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+		Camera->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	}
+	
+	if (!Ball)
+	{
+		Ball = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ball"));
+		Ball->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	}
+	
+	if (!PlankLeft)
+	{
+		PlankLeft = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlankLeft"));
+		PlankLeft->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	}
+	
+	if (!PlankRight)
+	{
+		PlankRight = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlankRight"));
+		PlankRight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	}
+	
 }
 
 // Called when the game starts or when spawned
@@ -43,14 +66,32 @@ void ABaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (IsScreenTouch)
 	{
-		Alpha = FMath::FInterpTo(Alpha, 1, DeltaTime, 5);
+		Alpha = FMath::FInterpTo(Alpha, 1, DeltaTime, 6);
 	}
 	else
 	{
-		Alpha = FMath::FInterpTo(Alpha, 0, DeltaTime, 5);
+		Alpha = FMath::FInterpTo(Alpha, 0, DeltaTime, 6);
 	}
 	RotationLerpComponent(PlankLeft, LeftPlankRotation0, LeftPlankRotation1, Alpha);
 	RotationLerpComponent(PlankRight, RightPlankRotation0, RightPlankRotation1, Alpha);
+
+	
+
+	if (Ball)
+	{
+		if (Ball->GetComponentLocation().Z > MaxHighRun)
+		{
+			MaxHighRun = Ball->GetComponentLocation().Z;
+		}
+		//Camera follow ball
+		Camera->SetWorldLocation(FMath::VInterpTo(Camera->GetComponentLocation(), FVector(Camera->GetComponentLocation().X, Camera->GetComponentLocation().Y, Ball->GetComponentLocation().Z), DeltaTime, 10));
+
+		if (Ball->GetComponentLocation().Z - Camera->GetComponentLocation().Z >= 350.0)
+		{
+			PlankLeft->SetWorldLocation(FVector(PlankLeft->GetComponentLocation().X, PlankLeft->GetComponentLocation().Y, Camera->GetComponentLocation().Z - 350.0));
+			PlankRight->SetWorldLocation(FVector(PlankRight->GetComponentLocation().X, PlankRight->GetComponentLocation().Y, Camera->GetComponentLocation().Z - 350.0));
+		}
+	}
 
 }
 
