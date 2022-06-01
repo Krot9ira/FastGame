@@ -17,12 +17,26 @@ public:
 	ABaseCharacter();
 
 protected:
+	//Defoult value which sets if seed value is unacceptable
+	const float DefoultDistanceFromBall = 350.0f;
+	const float DefoultPlankRotationSpeed = 6.0f;
+	const float DefoultCameraSpeed = 10.0f;
 	
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		bool IsScreenTouch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UCameraComponent* Camera;
+	//How far dow from ball can be planks
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float MaxDistanceFromBall;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float PlankRotationSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CameraSpeed;
+	
 
 
 	//set rotation between two rotation by alpha
@@ -38,7 +52,7 @@ protected:
 
 public:	
 	//Ball which will fly
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		UStaticMeshComponent* Ball;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

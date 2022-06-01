@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.0",
+	"EngineAssociation": "{C17067AB-4B10-877D-9C53-418C8DB3ED8E}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -33,6 +33,10 @@
 		{
 			"Name": "OnlineSubsystemGoogle",
 			"Enabled": true
+		},
+		{
+			"Name": "ResonanceAudio",
+			"Enabled": false
 		}
 	]
 }

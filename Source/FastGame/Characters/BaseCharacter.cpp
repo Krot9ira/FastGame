@@ -38,6 +38,16 @@ ABaseCharacter::ABaseCharacter()
 		PlankRight = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlankRight"));
 		PlankRight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	}
+
+	if (!MaxDistanceFromBall || MaxDistanceFromBall < 350)
+	{
+		MaxDistanceFromBall = 350;
+	}
+
+	if (!PlankRotationSpeed || PlankRotationSpeed < 1)
+	{
+		PlankRotationSpeed = 6;
+	}
 	
 }
 
@@ -66,11 +76,11 @@ void ABaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (IsScreenTouch)
 	{
-		Alpha = FMath::FInterpTo(Alpha, 1, DeltaTime, 6);
+		Alpha = FMath::FInterpTo(Alpha, 1, DeltaTime, PlankRotationSpeed);
 	}
 	else
 	{
-		Alpha = FMath::FInterpTo(Alpha, 0, DeltaTime, 6);
+		Alpha = FMath::FInterpTo(Alpha, 0, DeltaTime, PlankRotationSpeed);
 	}
 	RotationLerpComponent(PlankLeft, LeftPlankRotation0, LeftPlankRotation1, Alpha);
 	RotationLerpComponent(PlankRight, RightPlankRotation0, RightPlankRotation1, Alpha);
@@ -86,10 +96,10 @@ void ABaseCharacter::Tick(float DeltaTime)
 		//Camera follow ball
 		Camera->SetWorldLocation(FMath::VInterpTo(Camera->GetComponentLocation(), FVector(Camera->GetComponentLocation().X, Camera->GetComponentLocation().Y, Ball->GetComponentLocation().Z), DeltaTime, 10));
 
-		if (Ball->GetComponentLocation().Z - Camera->GetComponentLocation().Z >= 350.0)
+		if (Ball->GetComponentLocation().Z - PlankLeft->GetComponentLocation().Z >= DefoultDistanceFromBall)
 		{
-			PlankLeft->SetWorldLocation(FVector(PlankLeft->GetComponentLocation().X, PlankLeft->GetComponentLocation().Y, Camera->GetComponentLocation().Z - 350.0));
-			PlankRight->SetWorldLocation(FVector(PlankRight->GetComponentLocation().X, PlankRight->GetComponentLocation().Y, Camera->GetComponentLocation().Z - 350.0));
+			PlankLeft->SetWorldLocation(FVector(PlankLeft->GetComponentLocation().X, PlankLeft->GetComponentLocation().Y, Camera->GetComponentLocation().Z - DefoultDistanceFromBall));
+			PlankRight->SetWorldLocation(FVector(PlankRight->GetComponentLocation().X, PlankRight->GetComponentLocation().Y, Camera->GetComponentLocation().Z - DefoultDistanceFromBall));
 		}
 	}
 
